@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.EventListener;
 
 public class JimsGUI extends JFrame {
 
@@ -51,6 +52,7 @@ public class JimsGUI extends JFrame {
         loginButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         loginButton.setBounds(260, 400, 80, 45);
         loginButton.setBackground(new Color(240,240,241));
+
         add(loginButton);
 
         // Add Login Background
