@@ -12,7 +12,7 @@
 
 Martin Goberg - martingoberg@gmail.com^
 
-Test
+Test mer test
 
 Project Link: [LINK](https://github.com/mgoberg/javainvmanag)
 
