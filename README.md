@@ -10,6 +10,7 @@
 ## Contact
 
 Martin Goberg - martingoberg@gmail.com
+Anders Fløysvik - andf7@hotmail.com
 
 Project Link: [LINK](https://github.com/mgoberg/javainvmanag)
 
