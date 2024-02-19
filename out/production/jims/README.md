@@ -12,10 +12,8 @@
 
 Martin Goberg - martingoberg@gmail.com
 Anders Fleisvik - andf7@hotmail.com
-Test 2
-Blabalablaaa
+Amund Mikalsen - amundmikalsen@gmail.com 
 
-Test mer test
 
 Project Link: [LINK](https://github.com/mgoberg/javainvmanag)
 
