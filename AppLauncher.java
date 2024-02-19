@@ -5,10 +5,9 @@ public class AppLauncher {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                // display our weather app gui
+                // Display program
                 new JimsGUI().setVisible(true);
 
-                // System.out.println(weatherApp.getLocationData("Oslo"));
 
             }
         });

@@ -1,3 +1,4 @@
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -10,39 +11,68 @@ import java.io.IOException;
 public class JimsGUI extends JFrame {
 
     public JimsGUI() {
-        // Setter navnet på vindu
+        // Naming the Window
         super("Inventory Management System");
 
         // Exit on close
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        // Setter størrelse på GUI
+        // Window Size
         setSize(1200,800);
 
-        // Startposisjon 0
+        // Start Position
         setLocationRelativeTo(null);
 
         setLayout(null);
 
-        // Stopp Resizing
+        // Stop Resizing
         setResizable(false);
-
         addGuiComponents();
 
     }
 
     private void addGuiComponents() {
-        //Component eksempel søkefelt
-        JTextField searchTextField = new JTextField();
-        // Setter koordinater for posisjon
-        searchTextField.setBounds(15,15,450,45);
-        //Her kan man sette font
-        searchTextField.setFont(new Font("Dialog", Font.PLAIN, 24));
 
-        //Legger til på progammet
-        add(searchTextField);
+        // Login Text
+        JLabel loginText = new JLabel("Admin Login");
+        loginText.setBounds(185,200,300,35);
+        loginText.setFont(new Font("Dialog", Font.BOLD, 40));
+        add(loginText);
 
-        // Legg til ny komponent
+        // Add Username text field
+        JTextField usernameTextField = new JTextField();
+        usernameTextField.setBounds(150,290,300,35);
+        usernameTextField.setFont(new Font("Dialog", Font.PLAIN, 20));
+        usernameTextField.setHorizontalAlignment(JTextField.CENTER);
+        add(usernameTextField);
+
+        // Add Password text field
+        JPasswordField passwordTextField = new JPasswordField();
+        passwordTextField.setBounds(150,340,300,35);
+        passwordTextField.setFont(new Font("Dialog", Font.PLAIN, 20));
+        passwordTextField.setHorizontalAlignment(JTextField.CENTER);
+        add(passwordTextField);
+
+        // Add Login Button
+        JButton loginButton = new JButton("Login");
+        loginButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        loginButton.setBounds(260, 400, 80, 45);
+        loginButton.setBackground(new Color(240,240,241));
+        add(loginButton);
+
+        // Add Login Background
+        JPanel loginAdmin = new JPanel();
+        Color fargeLoginAdmin = new Color(102, 167,197);
+        loginAdmin.setBackground(fargeLoginAdmin);
+        loginAdmin.setBounds(0, 0, getWidth() / 2, getHeight());
+        add(loginAdmin);
+
+        // Add Image to login
+        JLabel imageLogin = new JLabel(new ImageIcon("out/production/jims/assets/login.jpg"));
+        imageLogin.setBounds(600,0,getWidth()/2,getHeight());
+        add(imageLogin);
+
+        // Continue
 
     }
 }
