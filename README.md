@@ -12,7 +12,7 @@
 
 Martin Goberg - martingoberg@gmail.com
 Anders Fleisvik - andf7@hotmail.com
-Test 2
+Amund Mikalsen - amundmikalsen@gmail.com 
 Blabalablaaa
 
 Test mer test
