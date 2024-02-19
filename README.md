@@ -11,8 +11,9 @@
 ## Contact
 
 Martin Goberg - martingoberg@gmail.com
-Anders Fløysvik - andf7@hotmail.com
+Anders Fleisvik - andf7@hotmail.com
 Test 2
+Blabalablaaa
 
 Test mer test
 
