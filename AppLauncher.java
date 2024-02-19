@@ -6,8 +6,8 @@ public class AppLauncher {
             @Override
             public void run() {
                 // Display program
-                new JimsGUI().setVisible(true);
-                new OverviewGUI().setVisible(false);
+                new JimsGUI().setVisible(false);
+                new OverviewGUI().setVisible(true);
 
 
             }
