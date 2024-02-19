@@ -10,7 +10,9 @@
 
 ## Contact
 
-Martin Goberg - martingoberg@gmail.com^
+
+Martin Goberg - martingoberg@gmail.com
+Anders Fløysvik - andf7@hotmail.com
 
 Test mer test
 
