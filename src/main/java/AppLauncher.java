@@ -13,10 +13,9 @@ public class AppLauncher {
             @Override
             public void run() {
                 // Display program for debugging purposes
-                new JimsGUI().setVisible(true);
+                new JimsGUI().setVisible(false);
                 new OverviewGUI().setVisible(false);
-
-
+                new InventoryGUI().setVisible(true);
             }
         });
 

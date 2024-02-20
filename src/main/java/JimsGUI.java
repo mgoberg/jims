@@ -74,6 +74,7 @@ public class JimsGUI extends JFrame {
                 }
             }
         });
+
         add(loginButton);
 
         // Add Login Background
