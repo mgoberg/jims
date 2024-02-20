@@ -64,6 +64,9 @@ public class JimsGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (Jims.authenticateUser(usernameTextField.getText(),passwordTextField.getText())) {
                     JOptionPane.showMessageDialog(JimsGUI.this, "Login successful!");
+                    dispose();
+                    OverviewGUI overviewGUI = new OverviewGUI();
+                    overviewGUI.setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(JimsGUI.this, "Login failed. Invalid credentials.");
                 }
