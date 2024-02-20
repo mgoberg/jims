@@ -12,7 +12,7 @@ public class AppLauncher {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                // Display program
+                // Display program for debugging purposes
                 new JimsGUI().setVisible(true);
                 new OverviewGUI().setVisible(false);
 

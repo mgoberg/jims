@@ -1,0 +1,2 @@
+public class SettingsGUI {
+}
