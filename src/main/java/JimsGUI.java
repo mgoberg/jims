@@ -1,5 +1,12 @@
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.EventListener;
 
 public class JimsGUI extends JFrame {
@@ -51,8 +58,17 @@ public class JimsGUI extends JFrame {
         JButton loginButton = new JButton("Login");
         loginButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         loginButton.setBounds(260, 400, 80, 45);
-        loginButton.setBackground(new Color(240,240,241));
-
+        loginButton.setBackground(new Color(240, 240, 241));
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (Jims.authenticateUser(usernameTextField.getText(),passwordTextField.getText())) {
+                    JOptionPane.showMessageDialog(JimsGUI.this, "Login successful!");
+                } else {
+                    JOptionPane.showMessageDialog(JimsGUI.this, "Login failed. Invalid credentials.");
+                }
+            }
+        });
         add(loginButton);
 
         // Add Login Background
@@ -70,4 +86,9 @@ public class JimsGUI extends JFrame {
         // Continue
 
     }
+
 }
+
+
+
+
