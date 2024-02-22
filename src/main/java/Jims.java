@@ -37,6 +37,7 @@ public class Jims {
             return false;
         }
     }
+
     public static void insertItemIntoMongoDB(String itemName, double price, String desc, int qty) {
         MongoClient client = MongoClients.create("mongodb+srv://martingoberg:root@jims.byniw4p.mongodb.net/?retryWrites=true&w=majority");
         MongoDatabase database = client.getDatabase("items");
@@ -53,6 +54,7 @@ public class Jims {
 
         System.out.println("Item inserted successfully!");
     }
+
     public static void updateJTable(JTable table) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
@@ -68,7 +70,31 @@ public class Jims {
 
         System.out.println("JTable updated successfully!");
     }
+
+    public static void loadItems() {
+        MongoClient client = MongoClients.create("mongodb+srv://martingoberg:root@jims.byniw4p.mongodb.net/?retryWrites=true&w=majority");
+        MongoDatabase database = client.getDatabase("items");
+        MongoCollection<Document> collection = database.getCollection("items");
+    }
+
+    static void displayDatabase() {
+        MongoClient client = MongoClients.create("mongodb+srv://martingoberg:root@jims.byniw4p.mongodb.net/?retryWrites=true&w=majority");
+        System.out.println("Connected to Items > Items in MongoDB");
+        MongoDatabase database = client.getDatabase("items");
+        MongoCollection<Document> collection = database.getCollection("items");
+
+        List<Document> documents = collection.find().into(new ArrayList<>());
+
+        String[] columnNames = {"name", "Price", "Description", "Quantity"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+
+        for (Document document : documents) {
+            Object[] rowData = {document.get("name"), document.get("price"), document.get("desc"), document.get("qty")};
+            model.addRow(rowData);
+        }
+    }
 }
+
 
 
 

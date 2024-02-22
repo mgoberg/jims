@@ -28,6 +28,7 @@ public class OverviewGUI extends JFrame {
         addHeader();
         addOverviewPanel();
 
+
     }
 
     private void addButtons() {
