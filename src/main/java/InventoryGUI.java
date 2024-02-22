@@ -15,7 +15,7 @@ import java.util.List;
 
 
 public class InventoryGUI extends JFrame {
-
+    private static JTable table;
     public InventoryGUI() {
         // Naming the Window
         super("Overview");
@@ -35,7 +35,6 @@ public class InventoryGUI extends JFrame {
         displayDatabase();
         setResizable(false);
         addHeader();
-
         addOverviewPanel();
 
     }
@@ -70,7 +69,7 @@ public class InventoryGUI extends JFrame {
 
     }
 
-    private void displayDatabase() {
+    public void displayDatabase() {
         MongoClient client = MongoClients.create("mongodb+srv://martingoberg:root@jims.byniw4p.mongodb.net/?retryWrites=true&w=majority");
         System.out.println("Connected to Items > Items in MongoDB");
         MongoDatabase database = client.getDatabase("items");
@@ -149,7 +148,9 @@ public class InventoryGUI extends JFrame {
         add(addItemBtn);
 
     }
-
+    public static JTable getTable() {
+        return table;
+    }
 
 
     private void addOverviewPanel() {
