@@ -22,7 +22,7 @@ public class Jims {
     static MongoClient client;
     static MongoCollection<Document> usersCollection;
     private static DefaultTableModel table = new DefaultTableModel();
-    private static final String[] columnNames = {"name", "Price", "Description", "Quantity"};
+    private static final String[] columnNames = {"Name", "Price", "Description", "Quantity"};
     private JTable table1;
 
 
@@ -57,7 +57,7 @@ public class Jims {
 
     public static DefaultTableModel getTableModel() {
         List<Document> documents = loadItems();
-        String[] columnNames = {"name", "Price", "Description", "Quantity"};
+        String[] columnNames = {"Name", "Price", "Description", "Quantity"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
         for (Document document : documents) {
@@ -129,7 +129,7 @@ public class Jims {
 
         List<Document> documents = collection.find().into(new ArrayList<>());
 
-        String[] columnNames = {"name", "Price", "Description", "Quantity"};
+        String[] columnNames = {"Name", "Price", "Description", "Quantity"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
         for (Document document : documents) {
@@ -154,7 +154,7 @@ public class Jims {
 
         List<Document> documents = collection.find().into(new ArrayList<>());
 
-        String[] columnNames = {"name", "Price", "Description", "Quantity"};
+        String[] columnNames = {"Name", "Price", "Description", "Quantity"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
         for (Document document : documents) {
