@@ -28,11 +28,13 @@ public class JimsGUI extends JFrame {
 
         // Stop Resizing
         setResizable(false);
-        addGuiComponents();
+
+        //Add components
+        addLoginComponent();
 
     }
 
-    private void addGuiComponents() {
+    private void addLoginComponent() {
 
         // Login Text
         JLabel loginText = new JLabel("Admin Login");
@@ -59,6 +61,12 @@ public class JimsGUI extends JFrame {
         loginButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         loginButton.setBounds(260, 400, 80, 45);
         loginButton.setBackground(new Color(240, 240, 241));
+        add(loginButton);
+
+        //TODO Her må vi style popup message
+        //TODO JOptionPane.showMessageDialog
+
+        //Login validation
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -74,8 +82,6 @@ public class JimsGUI extends JFrame {
                 }
             }
         });
-
-        add(loginButton);
 
         // Add Login Background
         JPanel loginAdmin = new JPanel();

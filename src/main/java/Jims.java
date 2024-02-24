@@ -2,26 +2,84 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 
+import javax.print.Doc;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.awt.AWTEventMulticaster.add;
+
 public class Jims {
+    static MongoClient client;
+    static MongoCollection<Document> usersCollection;
+    private static DefaultTableModel table = new DefaultTableModel();
+    private static final String[] columnNames = {"name", "Price", "Description", "Quantity"};
+
+
+    public static void loadUsers() {
+        try {
+            client = MongoClients.create("mongodb+srv://martingoberg:root@jims.byniw4p.mongodb.net/?retryWrites=true&w=majority");
+            System.out.println("MongoDB connected! Ignore error for logging.");
+            MongoDatabase database = client.getDatabase("users");
+            usersCollection = database.getCollection("users");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static List<Document> loadItems() {
+        List<Document> documents = new ArrayList<>();
+
+        try {
+            MongoClient client = MongoClients.create("mongodb+srv://martingoberg:root@jims.byniw4p.mongodb.net/?retryWrites=true&w=majority");
+            System.out.println("Loaded table: Items");
+            MongoDatabase database = client.getDatabase("items");
+            MongoCollection<Document> collection = database.getCollection("items");
+
+            documents = collection.find().into(new ArrayList<>());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return documents;
+    }
+
+    public static DefaultTableModel getTableModel() {
+        List<Document> documents = loadItems();
+        String[] columnNames = {"name", "Price", "Description", "Quantity"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+
+        for (Document document : documents) {
+            Object[] rowData = {document.get("name"), document.get("price"), document.get("desc"), document.get("qty")};
+            model.addRow(rowData);
+        }
+
+        return model;
+    }
+
+
+    // Authenticate user
     public static boolean authenticateUser(String username, String password) {
         try {
             // Establish MongoDB connection
-            MongoClient client = MongoClients.create("mongodb+srv://martingoberg:root@jims.byniw4p.mongodb.net/?retryWrites=true&w=majority");
-            System.out.println("MongoDB connected! Ignore error for logging.");
-            MongoDatabase database = client.getDatabase("users");
-            MongoCollection<Document> usersCollection = database.getCollection("users");
+            loadUsers();
 
-            // Query for user authentication
+            // Handle
+            if (usersCollection == null) {
+                // Handle
+                System.out.println("ERROR: MongoDB Conn authenticateUser");
+                return false;
+            }
+
+            // Query for authenticating user
             Document userQuery = new Document("username", username)
                     .append("password", password);
 
@@ -54,30 +112,38 @@ public class Jims {
 
         System.out.println("Item inserted successfully!");
     }
-
     public static void updateJTable(JTable table) {
-        DefaultTableModel model = (DefaultTableModel) table.getModel();
-        model.setRowCount(0);
+        table.repaint();
+        System.out.println("Debugging!!! UpdateJTable called");
 
-        MongoClient client = MongoClients.create("mongodb+srv://martingoberg:root@jims.byniw4p.mongodb.net/?retryWrites=true&w=majority");
-        MongoDatabase database = client.getDatabase("items");
-        MongoCollection<Document> collection = database.getCollection("items");
-
-        collection.find().forEach(document -> {
-            Object[] rowData = {document.get("name"), document.get("price"), document.get("desc"), document.get("qty")};
-            model.addRow(rowData);
-        });
-
-        System.out.println("JTable updated successfully!");
-    }
-
-    public static void loadItems() {
-        MongoClient client = MongoClients.create("mongodb+srv://martingoberg:root@jims.byniw4p.mongodb.net/?retryWrites=true&w=majority");
-        MongoDatabase database = client.getDatabase("items");
-        MongoCollection<Document> collection = database.getCollection("items");
     }
 
     static void displayDatabase() {
+        MongoClient client = MongoClients.create("mongodb+srv://martingoberg:root@jims.byniw4p.mongodb.net/?retryWrites=true&w=majority");
+        System.out.println("Connected displayDatabase();");
+        MongoDatabase database = client.getDatabase("items");
+        MongoCollection<Document> collection = database.getCollection("items");
+
+        List<Document> documents = collection.find().into(new ArrayList<>());
+
+        String[] columnNames = {"name", "Price", "Description", "Quantity"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+
+        for (Document document : documents) {
+            Object[] rowData = {document.get("name"), document.get("price"), document.get("desc"), document.get("qty")};
+            model.addRow(rowData);
+        }
+
+        System.out.println("Data from the database:");
+        for (int i = 0; i < model.getRowCount(); i++) {
+            for (int j = 0; j < model.getColumnCount(); j++) {
+                System.out.print(model.getValueAt(i, j) + "\t");
+            }
+            System.out.println();
+        }
+    }
+
+    public static JTable getTable() {
         MongoClient client = MongoClients.create("mongodb+srv://martingoberg:root@jims.byniw4p.mongodb.net/?retryWrites=true&w=majority");
         System.out.println("Connected to Items > Items in MongoDB");
         MongoDatabase database = client.getDatabase("items");
@@ -92,8 +158,39 @@ public class Jims {
             Object[] rowData = {document.get("name"), document.get("price"), document.get("desc"), document.get("qty")};
             model.addRow(rowData);
         }
+
+        JTable table = new JTable(model);
+        table.setLayout(new BorderLayout());
+        table.setBounds(600, 95, 570, 700);
+
+        return table;
     }
+
+    public static void deleteItemFromMongoDB(int rowIndex) {
+        try {
+            MongoClient client = MongoClients.create("mongodb+srv://martingoberg:root@jims.byniw4p.mongodb.net/?retryWrites=true&w=majority");
+            MongoDatabase database = client.getDatabase("items");
+            MongoCollection<Document> collection = database.getCollection("items");
+
+            // Get the document ID from the selected row
+            List<Document> documents = collection.find().into(new ArrayList<>());
+            String itemId = documents.get(rowIndex).getObjectId("_id").toString();
+
+            // Create a filter for the document to delete
+            Bson filter = Filters.eq("_id", new ObjectId(itemId));
+
+            // Delete the document from the collection
+            collection.deleteOne(filter);
+
+            System.out.println("Item deleted from MongoDB!");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
+
 
 
 

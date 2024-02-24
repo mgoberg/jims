@@ -1,21 +1,19 @@
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import org.bson.Document;
-
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class InventoryGUI extends JFrame {
-    private static JTable table;
+    private JTextField nameText;
+    private JTextField priceText;
+    private JTextField descText;
+    private JTextField qtyText;
+    private JTable table;
     public InventoryGUI() {
         // Naming the Window
         super("Overview");
@@ -32,11 +30,54 @@ public class InventoryGUI extends JFrame {
         setLayout(null);
 
         // Stop Resizing
-        displayDatabase();
         setResizable(false);
+
+        // Add components
+        addDeleteButton();
+        displayTable();
+        addButtons();
+        textField();
         addHeader();
         addOverviewPanel();
+        addTableSelectionListener();
 
+
+    }
+    private void addTableSelectionListener() {
+        // Add selection listener to the table
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                int selectedRow = table.getSelectedRow();
+
+                if (selectedRow != -1) {
+                    DefaultTableModel model = (DefaultTableModel) table.getModel();
+
+                    // Retrieve data from the selected row
+                    String itemName = model.getValueAt(selectedRow, 0).toString();
+                    String price = model.getValueAt(selectedRow, 1).toString();
+                    String desc = model.getValueAt(selectedRow, 2).toString();
+                    String qty = model.getValueAt(selectedRow, 3).toString();
+
+                    // Set the text fields with the retrieved data
+                    nameText.setText(itemName);
+                    priceText.setText(price);
+                    descText.setText(desc);
+                    qtyText.setText(qty);
+                }
+            }
+        });
+    }
+
+    public void displayTable() {
+        table = Jims.getTable();  // Update the reference to the JTable
+        add(table);
+        JTableHeader tableHeader = table.getTableHeader();
+        tableHeader.setBackground(Color.GRAY);
+        tableHeader.setForeground(Color.WHITE);
+        tableHeader.setReorderingAllowed(false);
+        tableHeader.setBounds(600, 75, 570, 20);
+        add(tableHeader);
     }
 
     private void addHeader() {
@@ -45,6 +86,7 @@ public class InventoryGUI extends JFrame {
         returnButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         returnButton.setBounds(10, 15, 100, 45);
         returnButton.setBackground(Color.WHITE);
+        add(returnButton);
         returnButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -53,7 +95,6 @@ public class InventoryGUI extends JFrame {
             }
         });
 
-        add(returnButton);
         // Add Header text
         JLabel headerText = new JLabel("Inventory");
         headerText.setBounds(500, 20, 500, 45);
@@ -66,71 +107,45 @@ public class InventoryGUI extends JFrame {
         header.setBackground(fargeHeader);
         header.setBounds(0, 0, 1200, 75);
         add(header);
-
     }
-
-    public void displayDatabase() {
-        MongoClient client = MongoClients.create("mongodb+srv://martingoberg:root@jims.byniw4p.mongodb.net/?retryWrites=true&w=majority");
-        System.out.println("Connected to Items > Items in MongoDB");
-        MongoDatabase database = client.getDatabase("items");
-        MongoCollection<Document> collection = database.getCollection("items");
-
-        List<Document> documents = collection.find().into(new ArrayList<>());
-
-        String[] columnNames = {"name", "Price", "Description", "Quantity"};
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-
-        for (Document document : documents) {
-            Object[] rowData = {document.get("name"), document.get("price"), document.get("desc"), document.get("qty")};
-            model.addRow(rowData);
-        }
-
-        JTable table = new JTable(model);
-        table.setLayout(new BorderLayout());
-        table.setBounds(600, 95, 570, 700);
-
-        JTableHeader tableHeader = table.getTableHeader();
-        tableHeader.setBackground(Color.BLUE);
-        tableHeader.setForeground(Color.WHITE);
-        tableHeader.setBounds(600, 75, 570, 20);
-
-        add(tableHeader);
-        add(table);
-
+    public void textField() {
         //Text fields
-        JTextField nameText = new JTextField();
+        nameText = new JTextField();
         nameText.setBounds(200, 200, 150, 35);
         add(nameText);
         JLabel nameLabel = new JLabel("Name:");
         nameLabel.setBounds(150, 200, 150, 35);
         add(nameLabel);
 
-        JTextField priceText = new JTextField();
+        priceText = new JTextField();
         priceText.setBounds(200, 250, 150, 35);
         add(priceText);
         JLabel priceLabel = new JLabel("Price:");
         priceLabel.setBounds(150, 250, 150, 35);
         add(priceLabel);
 
-        JTextField descText = new JTextField();
+        descText = new JTextField();
         descText.setBounds(200, 300, 150, 35);
         add(descText);
         JLabel descLabel = new JLabel("Description:");
         descLabel.setBounds(120, 300, 150, 35);
         add(descLabel);
 
-        JTextField qtyText = new JTextField();
+        qtyText = new JTextField();
         qtyText.setBounds(200, 350, 150, 35);
         add(qtyText);
         JLabel qtyLabel = new JLabel("Qty:");
         qtyLabel.setBounds(150, 350, 150, 35);
         add(qtyLabel);
-
+    }
+    public void addButtons() {
+        // Add item Button
         JButton addItemBtn = new JButton("Add Item");
         // TODO Placeholder spot
         addItemBtn.setBounds(50, 80, 150, 45);
         addItemBtn.setBackground(new Color(240, 240, 241));
         addItemBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        add(addItemBtn);
         addItemBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -139,19 +154,60 @@ public class InventoryGUI extends JFrame {
                 String desc = descText.getText();
                 int qty = Integer.parseInt(qtyText.getText());
 
-                Jims.insertItemIntoMongoDB(itemName,price,desc,qty);
-                Jims.updateJTable(table);
+                Jims.insertItemIntoMongoDB(itemName, price, desc, qty);
+
+                // Use the existing table variable in your InventoryGUI class
+                DefaultTableModel updatedModel = Jims.getTableModel();
+                table.setModel(updatedModel);
+                table.repaint();
 
             }
         });
 
-        add(addItemBtn);
-
+        // Add Refresh button
+        JButton refreshBtn = new JButton("Refresh");
+        // TODO Placeholder spot
+        refreshBtn.setBounds(200, 80, 150, 45);
+        refreshBtn.setBackground(new Color(240, 240, 241));
+        refreshBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        add(refreshBtn);
+        refreshBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Jims.displayDatabase();
+                Jims.updateJTable(Jims.getTable());
+                Jims.getTable().setModel(Jims.getTable().getModel());
+                System.out.println("Number of rows in the model: " + Jims.getTable().getModel().getRowCount());
+            }
+        });
     }
-    public static JTable getTable() {
-        return table;
-    }
+    private void addDeleteButton() {
+        // Add Delete button
+        JButton deleteItemBtn = new JButton("Delete Item");
+        deleteItemBtn.setBounds(350, 80, 150, 45);
+        deleteItemBtn.setBackground(new Color(240, 240, 241));
+        deleteItemBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        add(deleteItemBtn);
+        deleteItemBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedRow = table.getSelectedRow();
 
+                if (selectedRow != -1) {
+                    DefaultTableModel model = (DefaultTableModel) table.getModel();
+                    model.removeRow(selectedRow);
+
+                    // You may want to add logic to delete the corresponding item from the database
+                    // For simplicity, let's assume you have a method in Jims class for this purpose
+                    Jims.deleteItemFromMongoDB(selectedRow);
+
+                    System.out.println("Row deleted successfully!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Please select a row to delete.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+    }
 
     private void addOverviewPanel() {
         // Add background panel
@@ -160,12 +216,5 @@ public class InventoryGUI extends JFrame {
         overView.setBackground(fargeOverview);
         overView.setBounds(0, 0, getWidth(), getHeight());
         add(overView);
-
     }
-
-
-
-
-
-
 }
