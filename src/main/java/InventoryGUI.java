@@ -1,6 +1,7 @@
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
@@ -77,14 +78,20 @@ public class InventoryGUI extends JFrame {
 
     public void displayTable() {
         table = Jims.getTable();  // Update the reference to the JTable
-        add(table);
+        // Wrap the table in a JScrollPane
+        JScrollPane scrollPane = new JScrollPane(table);
+        Color scrollpanebg = new Color(124, 199, 194);
+        scrollPane.setBounds(50, 75, 1090, 300);
+       // table.setBackground(Color.BLACK);
+        add(scrollPane);
+
         JTableHeader tableHeader = table.getTableHeader();
         tableHeader.setBackground(Color.GRAY);
         tableHeader.setForeground(Color.WHITE);
         tableHeader.setReorderingAllowed(false);
         tableHeader.setBounds(600, 75, 570, 20);
         add(tableHeader);
-
+        table.setGridColor(Color.LIGHT_GRAY);
     }
 
     private void addHeader() {
@@ -108,48 +115,76 @@ public class InventoryGUI extends JFrame {
         headerText.setFont(new Font("Dialog", Font.BOLD, 40));
         add(headerText);
 
+        // Add second Header text
+        JLabel SecondHeaderText = new JLabel("Control Panel");
+        SecondHeaderText.setBounds(470, 385, 500, 45);
+        SecondHeaderText.setFont(new Font("Dialog", Font.BOLD, 40));
+        add(SecondHeaderText);
+
         // Add header panel
         JPanel header = new JPanel();
         Color fargeHeader = new Color(124, 199, 194);
         header.setBackground(fargeHeader);
         header.setBounds(0, 0, 1200, 75);
         add(header);
+
+        // Add second header panel
+        JPanel secondHeader = new JPanel();
+        Color secondHeaderFarge = new Color(50, 125, 198);
+        secondHeader.setBackground(secondHeaderFarge);
+        secondHeader.setBounds(0, 375, 1200, 75);
+        add(secondHeader);
+
+        // Add item header
+        JPanel addItemHeader = new JPanel();
+        Color addItemHeaderColor = new Color(99, 125, 200);
+        addItemHeader.setBackground(addItemHeaderColor);
+        addItemHeader.setBounds(0, 400, 350, 500);
+        add(addItemHeader);
+
+        JPanel addItemHeader2 = new JPanel();
+        Color addItemHeaderColor2 = new Color(99, 99, 99);
+        addItemHeader2.setBackground(addItemHeaderColor2);
+        addItemHeader2.setBounds(250, 400, 350, 500);
+        add(addItemHeader2);
+
     }
     public void textField() {
         //Text fields
         nameText = new JTextField();
-        nameText.setBounds(200, 200, 150, 35);
+        nameText.setBounds(100, 470, 150, 35);
         add(nameText);
         JLabel nameLabel = new JLabel("Name:");
-        nameLabel.setBounds(150, 200, 150, 35);
+        nameLabel.setBounds(50, 470, 150, 35);
         add(nameLabel);
 
         priceText = new JTextField();
-        priceText.setBounds(200, 250, 150, 35);
+        priceText.setBounds(100, 520, 150, 35);
         add(priceText);
         JLabel priceLabel = new JLabel("Price:");
-        priceLabel.setBounds(150, 250, 150, 35);
+        priceLabel.setBounds(50, 520, 150, 35);
         add(priceLabel);
 
         descText = new JTextField();
-        descText.setBounds(200, 300, 150, 35);
+        descText.setBounds(100, 570, 150, 35);
         add(descText);
         JLabel descLabel = new JLabel("Description:");
-        descLabel.setBounds(120, 300, 150, 35);
+        descLabel.setBounds(20, 570, 150, 35);
         add(descLabel);
 
         qtyText = new JTextField();
-        qtyText.setBounds(200, 350, 150, 35);
+        qtyText.setBounds(100, 620, 150, 35);
         add(qtyText);
         JLabel qtyLabel = new JLabel("Qty:");
-        qtyLabel.setBounds(150, 350, 150, 35);
+        qtyLabel.setBounds(50, 620, 150, 35);
         add(qtyLabel);
+        table.setFont(new Font("Dialog", Font.PLAIN, 15));
     }
     public void addButtons() {
         // Add item Button
         JButton addItemBtn = new JButton("Add Item");
         // TODO Placeholder spot
-        addItemBtn.setBounds(50, 80, 150, 45);
+        addItemBtn.setBounds(100, 670, 150, 45);
         addItemBtn.setBackground(new Color(240, 240, 241));
         addItemBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add(addItemBtn);
@@ -174,7 +209,7 @@ public class InventoryGUI extends JFrame {
         // Add Refresh button
         JButton refreshBtn = new JButton("Refresh");
         // TODO Placeholder spot
-        refreshBtn.setBounds(200, 80, 150, 45);
+        refreshBtn.setBounds(400, 470, 150, 45);
         refreshBtn.setBackground(new Color(240, 240, 241));
         refreshBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add(refreshBtn);
@@ -190,8 +225,8 @@ public class InventoryGUI extends JFrame {
     }
     private void addDeleteButton() {
         // Add Delete button
-        JButton deleteItemBtn = new JButton("Delete Item");
-        deleteItemBtn.setBounds(350, 80, 150, 45);
+        JButton deleteItemBtn = new JButton("Delete selected item");
+        deleteItemBtn.setBounds(400, 520, 150, 45);
         deleteItemBtn.setBackground(new Color(240, 240, 241));
         deleteItemBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add(deleteItemBtn);
@@ -218,7 +253,7 @@ public class InventoryGUI extends JFrame {
     private void addSortingButtons() {
         // Add Sort by Price button
         JButton sortByPriceBtn = new JButton("Sort by Price");
-        sortByPriceBtn.setBounds(350, 150, 150, 45);
+        sortByPriceBtn.setBounds(400, 570, 150, 45);
         sortByPriceBtn.setBackground(new Color(240, 240, 241));
         sortByPriceBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add(sortByPriceBtn);
@@ -231,20 +266,20 @@ public class InventoryGUI extends JFrame {
 
         // Add Sort A-Z button
         JButton sortAZBtn = new JButton("Sort A-Z");
-        sortAZBtn.setBounds(350, 200, 150, 45);
+        sortAZBtn.setBounds(400, 620, 150, 45);
         sortAZBtn.setBackground(new Color(240, 240, 241));
         sortAZBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add(sortAZBtn);
         sortAZBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                sortTableByColumn("name");
+                sortTableByColumn("Name");
             }
         });
 
         // Add Sort by Quantity button
         JButton sortByQtyBtn = new JButton("Sort by Quantity");
-        sortByQtyBtn.setBounds(350, 250, 150, 45);
+        sortByQtyBtn.setBounds(400, 670, 150, 45);
         sortByQtyBtn.setBackground(new Color(240, 240, 241));
         sortByQtyBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add(sortByQtyBtn);
