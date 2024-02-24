@@ -6,6 +6,9 @@ import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Comparator;
+import java.util.Vector;
+import java.util.stream.Collectors;
 
 
 public class InventoryGUI extends JFrame {
@@ -13,7 +16,7 @@ public class InventoryGUI extends JFrame {
     private JTextField priceText;
     private JTextField descText;
     private JTextField qtyText;
-    private JTable table;
+    private static JTable table;
     public InventoryGUI() {
         // Naming the Window
         super("Overview");
@@ -33,6 +36,7 @@ public class InventoryGUI extends JFrame {
         setResizable(false);
 
         // Add components
+        addSortingButtons();
         addDeleteButton();
         displayTable();
         addButtons();
@@ -41,8 +45,10 @@ public class InventoryGUI extends JFrame {
         addOverviewPanel();
         addTableSelectionListener();
 
+        table.setAutoCreateRowSorter(true);
 
     }
+
     private void addTableSelectionListener() {
         // Add selection listener to the table
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -78,6 +84,7 @@ public class InventoryGUI extends JFrame {
         tableHeader.setReorderingAllowed(false);
         tableHeader.setBounds(600, 75, 570, 20);
         add(tableHeader);
+
     }
 
     private void addHeader() {
@@ -156,7 +163,7 @@ public class InventoryGUI extends JFrame {
 
                 Jims.insertItemIntoMongoDB(itemName, price, desc, qty);
 
-                // Use the existing table variable in your InventoryGUI class
+                // Use the existing table variable
                 DefaultTableModel updatedModel = Jims.getTableModel();
                 table.setModel(updatedModel);
                 table.repaint();
@@ -174,9 +181,9 @@ public class InventoryGUI extends JFrame {
         refreshBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Jims.displayDatabase();
-                Jims.updateJTable(Jims.getTable());
-                Jims.getTable().setModel(Jims.getTable().getModel());
+                DefaultTableModel updatedModel = Jims.getTableModel();
+                table.setModel(updatedModel);
+                table.repaint();
                 System.out.println("Number of rows in the model: " + Jims.getTable().getModel().getRowCount());
             }
         });
@@ -208,6 +215,64 @@ public class InventoryGUI extends JFrame {
             }
         });
     }
+    private void addSortingButtons() {
+        // Add Sort by Price button
+        JButton sortByPriceBtn = new JButton("Sort by Price");
+        sortByPriceBtn.setBounds(350, 150, 150, 45);
+        sortByPriceBtn.setBackground(new Color(240, 240, 241));
+        sortByPriceBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        add(sortByPriceBtn);
+        sortByPriceBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                sortTableByColumn("Price");
+            }
+        });
+
+        // Add Sort A-Z button
+        JButton sortAZBtn = new JButton("Sort A-Z");
+        sortAZBtn.setBounds(350, 200, 150, 45);
+        sortAZBtn.setBackground(new Color(240, 240, 241));
+        sortAZBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        add(sortAZBtn);
+        sortAZBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                sortTableByColumn("name");
+            }
+        });
+
+        // Add Sort by Quantity button
+        JButton sortByQtyBtn = new JButton("Sort by Quantity");
+        sortByQtyBtn.setBounds(350, 250, 150, 45);
+        sortByQtyBtn.setBackground(new Color(240, 240, 241));
+        sortByQtyBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        add(sortByQtyBtn);
+        sortByQtyBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                sortTableByColumn("Quantity");
+            }
+        });
+    }
+    private void sortTableByColumn(String columnName) {
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        int columnIndex = model.findColumn(columnName);
+
+        Vector<Vector> data = model.getDataVector();
+
+        data.sort((Comparator<? super Vector>) (row1, row2) -> {
+            String value1 = row1.get(columnIndex).toString();
+            String value2 = row2.get(columnIndex).toString();
+
+            // Compare the values
+            return value1.compareTo(value2);
+        });
+
+        model.fireTableDataChanged();
+    }
+
+
 
     private void addOverviewPanel() {
         // Add background panel
