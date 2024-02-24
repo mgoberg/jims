@@ -12,7 +12,9 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Vector;
 
 import static java.awt.AWTEventMulticaster.add;
 
@@ -21,6 +23,7 @@ public class Jims {
     static MongoCollection<Document> usersCollection;
     private static DefaultTableModel table = new DefaultTableModel();
     private static final String[] columnNames = {"name", "Price", "Description", "Quantity"};
+    private JTable table1;
 
 
     public static void loadUsers() {
@@ -187,7 +190,6 @@ public class Jims {
             e.printStackTrace();
         }
     }
-
 
 }
 
