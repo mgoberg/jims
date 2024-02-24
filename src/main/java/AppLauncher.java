@@ -13,12 +13,12 @@ public class AppLauncher {
             @Override
             public void run() {
                 // Display program for debugging purposes
-                new JimsGUI().setVisible(true);
+                new JimsGUI().setVisible(false);
                 new OverviewGUI().setVisible(false);
-                new InventoryGUI().setVisible(false);
+                new InventoryGUI().setVisible(true);
                 // TODO DB Loader må her, vi må skrive en metode i Jims som heter loadDatabase, som "spawner" databasen på et table som ikke brukes.
-                new PreLoader(InventoryGUI.getTable()); // TODO Byttes ut med Jims.getTable() så fort vi har skrevet en metode som spawner db
-                PreLoader.worker.execute();
+               // new PreLoader(InventoryGUI.getTable()); // TODO Byttes ut med Jims.getTable() så fort vi har skrevet en metode som spawner db
+               // PreLoader.worker.execute();
 
             }
         });

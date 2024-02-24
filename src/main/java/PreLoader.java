@@ -16,7 +16,7 @@ public class PreLoader {
 
         @Override
         protected void done() {
-            Jims.updateJTable(table);
+            Jims.updateJTable(Jims.getTable());
         }
     };
 }
