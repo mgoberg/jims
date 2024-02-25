@@ -38,7 +38,7 @@ public class JimsGUI extends JFrame {
 
         // Login Text
         JLabel loginText = new JLabel("Admin Login");
-        loginText.setBounds(185,200,300,35);
+        loginText.setBounds(185,200,300,45);
         loginText.setFont(new Font("Dialog", Font.BOLD, 40));
         add(loginText);
 
