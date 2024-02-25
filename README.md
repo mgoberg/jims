@@ -19,11 +19,6 @@
 
 JIMS, short for Java Inventory Management System, is a comprehensive inventory management application developed in Java. The system provides a user-friendly graphical interface using Java Swing, leverages Maven for project management, and stores inventory data in MongoDB for efficient and scalable data management.
 
-## Introduction
-
-JIMS aims to simplify the process of managing inventory for businesses by providing an intuitive and reliable system. It offers features for user authentication, allowing controlled access to the inventory management functionalities. The integration of MongoDB ensures a robust and scalable database solution for storing and retrieving inventory data.
-
-
 ## Features
 
 - **🔐 User Authentication:**
