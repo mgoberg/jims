@@ -1,15 +1,11 @@
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.util.Comparator;
 import java.util.Vector;
-import java.util.stream.Collectors;
+
 
 
 public class InventoryGUI extends JFrame {
@@ -18,6 +14,7 @@ public class InventoryGUI extends JFrame {
     private JTextField descText;
     private JTextField qtyText;
     private static JTable table;
+
     public InventoryGUI() {
         // Naming the Window
         super("Overview");
@@ -47,31 +44,29 @@ public class InventoryGUI extends JFrame {
         addTableSelectionListener();
 
         table.setAutoCreateRowSorter(true);
+        // Jims.scheduleTableUpdate(); LIVE UPDATES FOR DEBUGGING!!!
 
     }
 
     private void addTableSelectionListener() {
         // Add selection listener to the table
-        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                int selectedRow = table.getSelectedRow();
+        table.getSelectionModel().addListSelectionListener(e -> {
+            int selectedRow = table.getSelectedRow();
 
-                if (selectedRow != -1) {
-                    DefaultTableModel model = (DefaultTableModel) table.getModel();
+            if (selectedRow != -1) {
+                DefaultTableModel model = (DefaultTableModel) table.getModel();
 
-                    // Retrieve data from the selected row
-                    String itemName = model.getValueAt(selectedRow, 0).toString();
-                    String price = model.getValueAt(selectedRow, 1).toString();
-                    String desc = model.getValueAt(selectedRow, 2).toString();
-                    String qty = model.getValueAt(selectedRow, 3).toString();
+                // Retrieve data from the selected row
+                String itemName = model.getValueAt(selectedRow, 0).toString();
+                String price = model.getValueAt(selectedRow, 1).toString();
+                String desc = model.getValueAt(selectedRow, 2).toString();
+                String qty = model.getValueAt(selectedRow, 3).toString();
 
-                    // Set the text fields with the retrieved data
-                    nameText.setText(itemName);
-                    priceText.setText(price);
-                    descText.setText(desc);
-                    qtyText.setText(qty);
-                }
+                // Set the text fields with the retrieved data
+                nameText.setText(itemName);
+                priceText.setText(price);
+                descText.setText(desc);
+                qtyText.setText(qty);
             }
         });
     }
@@ -80,9 +75,8 @@ public class InventoryGUI extends JFrame {
         table = Jims.getTable();  // Update the reference to the JTable
         // Wrap the table in a JScrollPane
         JScrollPane scrollPane = new JScrollPane(table);
-        Color scrollpanebg = new Color(124, 199, 194);
         scrollPane.setBounds(50, 75, 1090, 300);
-       // table.setBackground(Color.BLACK);
+        // table.setBackground(Color.BLACK);
         add(scrollPane);
 
         JTableHeader tableHeader = table.getTableHeader();
@@ -101,12 +95,9 @@ public class InventoryGUI extends JFrame {
         returnButton.setBounds(10, 15, 100, 45);
         returnButton.setBackground(Color.WHITE);
         add(returnButton);
-        returnButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-                new OverviewGUI().setVisible(true);
-            }
+        returnButton.addActionListener(e -> {
+            dispose();
+            new OverviewGUI().setVisible(true);
         });
 
         // Add Header text
@@ -149,6 +140,7 @@ public class InventoryGUI extends JFrame {
         add(addItemHeader2);
 
     }
+
     public void textField() {
         //Text fields
         nameText = new JTextField();
@@ -180,6 +172,7 @@ public class InventoryGUI extends JFrame {
         add(qtyLabel);
         table.setFont(new Font("Dialog", Font.PLAIN, 15));
     }
+
     public void addButtons() {
         // Add item Button
         JButton addItemBtn = new JButton("Add Item");
@@ -188,22 +181,19 @@ public class InventoryGUI extends JFrame {
         addItemBtn.setBackground(new Color(240, 240, 241));
         addItemBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add(addItemBtn);
-        addItemBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String itemName = nameText.getText();
-                double price = Double.parseDouble(priceText.getText());
-                String desc = descText.getText();
-                int qty = Integer.parseInt(qtyText.getText());
+        addItemBtn.addActionListener(e -> {
+            String itemName = nameText.getText();
+            double price = Double.parseDouble(priceText.getText());
+            String desc = descText.getText();
+            int qty = Integer.parseInt(qtyText.getText());
 
-                Jims.insertItemIntoMongoDB(itemName, price, desc, qty);
+            Jims.insertItemIntoMongoDB(itemName, price, desc, qty);
 
-                // Use the existing table variable
-                DefaultTableModel updatedModel = Jims.getTableModel();
-                table.setModel(updatedModel);
-                table.repaint();
+            // Use the existing table variable
+            DefaultTableModel updatedModel = Jims.getTableModel();
+            table.setModel(updatedModel);
+            table.repaint();
 
-            }
         });
 
         // Add Refresh button
@@ -213,16 +203,14 @@ public class InventoryGUI extends JFrame {
         refreshBtn.setBackground(new Color(240, 240, 241));
         refreshBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add(refreshBtn);
-        refreshBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                DefaultTableModel updatedModel = Jims.getTableModel();
-                table.setModel(updatedModel);
-                table.repaint();
-                System.out.println("Number of rows in the model: " + Jims.getTable().getModel().getRowCount());
-            }
+        refreshBtn.addActionListener(e -> {
+            DefaultTableModel updatedModel = Jims.getTableModel();
+            table.setModel(updatedModel);
+            table.repaint();
+            System.out.println("Number of rows in the model: " + Jims.getTable().getModel().getRowCount());
         });
     }
+
     private void addDeleteButton() {
         // Add Delete button
         JButton deleteItemBtn = new JButton("Delete selected item");
@@ -230,26 +218,22 @@ public class InventoryGUI extends JFrame {
         deleteItemBtn.setBackground(new Color(240, 240, 241));
         deleteItemBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add(deleteItemBtn);
-        deleteItemBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selectedRow = table.getSelectedRow();
+        deleteItemBtn.addActionListener(e -> {
+            int selectedRow = table.getSelectedRow();
 
-                if (selectedRow != -1) {
-                    DefaultTableModel model = (DefaultTableModel) table.getModel();
-                    model.removeRow(selectedRow);
+            if (selectedRow != -1) {
+                DefaultTableModel model = (DefaultTableModel) table.getModel();
+                model.removeRow(selectedRow);
 
-                    // You may want to add logic to delete the corresponding item from the database
-                    // For simplicity, let's assume you have a method in Jims class for this purpose
-                    Jims.deleteItemFromMongoDB(selectedRow);
+                Jims.deleteItemFromMongoDB(selectedRow);
 
-                    System.out.println("Row deleted successfully!");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Please select a row to delete.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+                System.out.println("Row deleted successfully!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Please select a row to delete.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
     }
+
     private void addSortingButtons() {
         // Add Sort by Price button
         JButton sortByPriceBtn = new JButton("Sort by Price");
@@ -257,12 +241,7 @@ public class InventoryGUI extends JFrame {
         sortByPriceBtn.setBackground(new Color(240, 240, 241));
         sortByPriceBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add(sortByPriceBtn);
-        sortByPriceBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                sortTableByColumn("Price");
-            }
-        });
+        sortByPriceBtn.addActionListener(e -> sortTableByColumn("Price"));
 
         // Add Sort A-Z button
         JButton sortAZBtn = new JButton("Sort A-Z");
@@ -270,12 +249,7 @@ public class InventoryGUI extends JFrame {
         sortAZBtn.setBackground(new Color(240, 240, 241));
         sortAZBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add(sortAZBtn);
-        sortAZBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                sortTableByColumn("Name");
-            }
-        });
+        sortAZBtn.addActionListener(e -> sortTableByColumn("Name"));
 
         // Add Sort by Quantity button
         JButton sortByQtyBtn = new JButton("Sort by Quantity");
@@ -283,13 +257,9 @@ public class InventoryGUI extends JFrame {
         sortByQtyBtn.setBackground(new Color(240, 240, 241));
         sortByQtyBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add(sortByQtyBtn);
-        sortByQtyBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                sortTableByColumn("Quantity");
-            }
-        });
+        sortByQtyBtn.addActionListener(e -> sortTableByColumn("Quantity"));
     }
+
     private void sortTableByColumn(String columnName) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         int columnIndex = model.findColumn(columnName);
@@ -307,12 +277,10 @@ public class InventoryGUI extends JFrame {
         model.fireTableDataChanged();
     }
 
-
-
     private void addOverviewPanel() {
         // Add background panel
         JPanel overView = new JPanel();
-        Color fargeOverview = new Color(213, 255,255);
+        Color fargeOverview = new Color(213, 255, 255);
         overView.setBackground(fargeOverview);
         overView.setBounds(0, 0, getWidth(), getHeight());
         add(overView);
