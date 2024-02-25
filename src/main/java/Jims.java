@@ -24,7 +24,7 @@ public class Jims {
     static DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
     static MongoCollection<Document> collection;
-    
+
     //Live updates for co-Debugging
     public static void scheduleTableUpdate() {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
