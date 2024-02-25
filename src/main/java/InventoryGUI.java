@@ -44,7 +44,7 @@ public class InventoryGUI extends JFrame {
         addTableSelectionListener();
 
         table.setAutoCreateRowSorter(true);
-        // Jims.scheduleTableUpdate(); LIVE UPDATES FOR DEBUGGING!!!
+        // Jims.scheduleTableUpdate(); LIVE UPDATES FOR DEBUGGING!!! Remove // For testing
 
     }
 
