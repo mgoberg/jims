@@ -10,13 +10,15 @@ public class PreLoader {
     static SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
         @Override
         protected Void doInBackground() throws Exception {
-            Jims.displayDatabase();
+            Jims.getTableModel();
+            System.out.println("PreLoader loaded TableModel");
             return null;
         }
 
         @Override
         protected void done() {
-            Jims.updateJTable(Jims.getTable());
+            Jims.getTable();
+            System.out.println("Preloader finished");
         }
     };
 }
