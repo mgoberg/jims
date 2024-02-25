@@ -7,16 +7,14 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
-import javax.print.Doc;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Vector;
-
-import static java.awt.AWTEventMulticaster.add;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Jims {
     static MongoClient client;
@@ -26,6 +24,23 @@ public class Jims {
     static DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
     static MongoCollection<Document> collection;
+    
+    //Live updates for co-Debugging
+    public static void scheduleTableUpdate() {
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+        // Run the updateTable method every 10 seconds
+        scheduler.scheduleAtFixedRate(Jims::updateTableTask, 0, 10, TimeUnit.SECONDS);
+    }
+    private static void updateTableTask() {
+        SwingUtilities.invokeLater(() -> {
+            JTable table = getTable();
+            DefaultTableModel updatedModel = Jims.getTableModel();
+            table.setModel(updatedModel);
+            table.repaint();
+            System.out.println("Table updated");;
+        });
+    }
 
     // Establish Database connection
     public static void connDB() {
@@ -131,7 +146,6 @@ public class Jims {
         table.repaint();
         table.setLayout(new BorderLayout());
         table.setBounds(600, 95, 570, 700);
-
         return table;
     }
 

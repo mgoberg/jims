@@ -40,11 +40,11 @@ public class OverviewGUI extends JFrame {
         add(innstillingerbutton);
 
         // Add inventar button
-        JButton inventarbutton = new JButton("Inventory");
-        inventarbutton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        inventarbutton.setBounds(525, 300, 150, 140);
-        inventarbutton.setBackground(Color.gray);
-        inventarbutton.addActionListener(new ActionListener() {
+        JButton inventoryBtn = new JButton("Inventory");
+        inventoryBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        inventoryBtn.setBounds(525, 300, 150, 140);
+        inventoryBtn.setBackground(Color.gray);
+        inventoryBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
@@ -53,14 +53,14 @@ public class OverviewGUI extends JFrame {
             }
         });
 
-        add(inventarbutton);
+        add(inventoryBtn);
 
         // Add håndter inventar button
-        JButton håndterbutton = new JButton("Placeholder");
-        håndterbutton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        håndterbutton.setBounds(750, 300, 150, 140);
-        håndterbutton.setBackground(Color.gray);
-        add(håndterbutton);
+        JButton placeholder = new JButton("Placeholder");
+        placeholder.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        placeholder.setBounds(750, 300, 150, 140);
+        placeholder.setBackground(Color.gray);
+        add(placeholder);
 
         // Add header text
         JLabel headerText = new JLabel("Inventory Management");
