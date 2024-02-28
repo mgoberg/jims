@@ -79,9 +79,6 @@ Contributions to JIMS are welcome! Feel free to submit issues, suggest improveme
 4. Push to the branch: `git push origin feature/NewFeature`.
 5. Submit a pull request.
 
-## Preview
-![preview](https://github.com/mgoberg/jims/assets/116804646/26575f1f-6a87-4bf8-8a97-777b3196e44e)
-![preview2](https://github.com/mgoberg/jims/assets/116804646/c01ea286-0af3-4d8a-8aac-79181f3394ee)
 
 
 
