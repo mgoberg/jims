@@ -17,40 +17,35 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class Jims {
-    static MongoClient client;
-    static MongoCollection<Document> usersCollection;
-    private static final DefaultTableModel table = new DefaultTableModel();
-    private static final String[] columnNames = {"Name", "Price", "Description", "Quantity"};
-    static DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+    private static MongoClient client;
+    private static MongoCollection<Document> usersCollection;
+    private static final DefaultTableModel model = new DefaultTableModel(new String[]{"Name", "Price", "Description", "Quantity"}, 0);
 
-    static MongoCollection<Document> collection;
-
-    //Live updates for co-Debugging
+    // Live updates for co-Debugging
     public static void scheduleTableUpdate() {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
         // Run the updateTable method every 10 seconds
         scheduler.scheduleAtFixedRate(Jims::updateTableTask, 0, 10, TimeUnit.SECONDS);
     }
+
     private static void updateTableTask() {
         SwingUtilities.invokeLater(() -> {
             JTable table = getTable();
-            DefaultTableModel updatedModel = Jims.getTableModel();
+            DefaultTableModel updatedModel = getTableModel();
             table.setModel(updatedModel);
             table.repaint();
-            System.out.println("Table updated");;
+            System.out.println("Table updated");
         });
     }
 
     // Establish Database connection
-    public static void connDB() {
+    private static void connDB() {
         client = MongoClients.create("mongodb+srv://martingoberg:root@jims.byniw4p.mongodb.net/?retryWrites=true&w=majority");
-        MongoDatabase database = client.getDatabase("items");
-        MongoCollection<Document> collection = database.getCollection("items");
     }
 
     // Load users table
-    public static void loadUsers() {
+    private static void loadUsers() {
         try {
             connDB();
             MongoDatabase database = client.getDatabase("users");
@@ -77,11 +72,11 @@ public class Jims {
 
         return documents;
     }
+
     // Get tableModel
-    public static DefaultTableModel getTableModel() {
+    static DefaultTableModel getTableModel() {
         List<Document> documents = loadItems();
-        String[] columnNames = {"Name", "Price", "Description", "Quantity"};
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+        DefaultTableModel model = new DefaultTableModel(new String[]{"Name", "Price", "Description", "Quantity"}, 0);
 
         for (Document document : documents) {
             Object[] rowData = {document.get("name"), document.get("price"), document.get("desc"), document.get("qty")};
@@ -141,7 +136,7 @@ public class Jims {
     // Retrieves the table
     public static JTable getTable() {
         JTable table = new JTable(model);
-        DefaultTableModel updatedModel = Jims.getTableModel();
+        DefaultTableModel updatedModel = getTableModel();
         table.setModel(updatedModel);
         table.repaint();
         table.setLayout(new BorderLayout());
