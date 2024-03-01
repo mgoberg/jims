@@ -1,72 +1,84 @@
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import org.bson.Document;
+import com.formdev.flatlaf.FlatDarkLaf;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.EventListener;
 
 public class JimsGUI extends JFrame {
 
     public JimsGUI() {
-        // Naming the Window
-        super("Inventory Management System");
+        try {
+            UIManager.setLookAndFeel(new FlatDarkLaf());
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
+
 
         // Exit on close
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         // Window Size
-        setSize(1200,800);
+        setSize(800, 600);
 
         // Start Position
         setLocationRelativeTo(null);
 
-        setLayout(null);
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(null);  // Use absolute layout
+        mainPanel.setBackground(new Color(50, 50, 50));  // Set a dark background color
 
-        // Stop Resizing
-        setResizable(false);
+        // Add components
 
-        //Add components
-        addLoginComponent();
+        addLoginComponent(mainPanel);
 
+        setContentPane(mainPanel);
     }
 
-    private void addLoginComponent() {
-
+    private void addLoginComponent(JPanel mainPanel) {
         // Login Text
+        JLabel jimsText = new JLabel("JIMS");
+        jimsText.setBounds(335, 20, 200, 45);
+        jimsText.setFont(new Font("Dialog", Font.BOLD, 50));
+        jimsText.setForeground(Color.WHITE);  // Set text color to white
+        mainPanel.add(jimsText);
+
+        // Load the image
+        ImageIcon icon = new ImageIcon("images/logo.png");
+        Image image = icon.getImage();
+
+        // Scale the image
+        int width = 160;  // Desired width
+        int height = 160; // Desired height
+        Image scaledImage = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+
+        // Create a new ImageIcon with the scaled image
+        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+        JLabel imageLogin = new JLabel(scaledIcon);
+        imageLogin.setBounds(313, 80, width, height);
+        mainPanel.add(imageLogin);
+
+        // Login text
         JLabel loginText = new JLabel("Admin Login");
-        loginText.setBounds(185,200,300,45);
-        loginText.setFont(new Font("Dialog", Font.BOLD, 40));
-        add(loginText);
+        loginText.setBounds(300, 290, 200, 45);
+        loginText.setFont(new Font("Dialog", Font.BOLD, 30));
+        loginText.setForeground(Color.WHITE);  // Set text color to white
+        mainPanel.add(loginText);
 
         // Add Username text field
-        JTextField usernameTextField = new JTextField();
-        usernameTextField.setBounds(150,290,300,35);
-        usernameTextField.setFont(new Font("Dialog", Font.PLAIN, 20));
-        usernameTextField.setHorizontalAlignment(JTextField.CENTER);
-        add(usernameTextField);
+        JTextField usernameTextField = createTextField();
+        usernameTextField.setBounds(240, 350, 300, 35);
+        mainPanel.add(usernameTextField);
 
         // Add Password text field
-        JPasswordField passwordTextField = new JPasswordField();
-        passwordTextField.setBounds(150,340,300,35);
-        passwordTextField.setFont(new Font("Dialog", Font.PLAIN, 20));
-        passwordTextField.setHorizontalAlignment(JTextField.CENTER);
-        add(passwordTextField);
+        JPasswordField passwordTextField = createPasswordField();
+        passwordTextField.setBounds(240, 400, 300, 35);
+        mainPanel.add(passwordTextField);
 
         // Add Login Button
-        JButton loginButton = new JButton("Login");
-        loginButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        loginButton.setBounds(260, 400, 80, 45);
-        loginButton.setBackground(new Color(240, 240, 241));
-        add(loginButton);
-
-        //TODO Her må vi style popup message
-        //TODO JOptionPane.showMessageDialog
-
-        //Login validation
+        JButton loginButton = createButton("Login");
+        loginButton.setBounds(340, 450, 100, 45);
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -82,25 +94,37 @@ public class JimsGUI extends JFrame {
                 }
             }
         });
-
-        // Add Login Background
-        JPanel loginAdmin = new JPanel();
-        Color fargeLoginAdmin = new Color(102, 167,197);
-        loginAdmin.setBackground(fargeLoginAdmin);
-        loginAdmin.setBounds(0, 0, getWidth() / 2, getHeight());
-        add(loginAdmin);
-
-        // Add Image to login
-        JLabel imageLogin = new JLabel(new ImageIcon("out/production/jims/assets/login.jpg"));
-        imageLogin.setBounds(600,0,getWidth()/2,getHeight());
-        add(imageLogin);
-
-        // Continue
-
+        mainPanel.add(loginButton);
     }
 
+    private JTextField createTextField() {
+        JTextField textField = new JTextField();
+        textField.setFont(new Font("Dialog", Font.PLAIN, 18));
+        textField.setBackground(new Color(70, 70, 70));  // Set a dark background color
+        textField.setForeground(Color.WHITE);  // Set text color to white
+        return textField;
+    }
+
+    private JPasswordField createPasswordField() {
+        JPasswordField passwordField = new JPasswordField();
+        passwordField.setFont(new Font("Dialog", Font.PLAIN, 18));
+        passwordField.setBackground(new Color(70, 70, 70));  // Set a dark background color
+        passwordField.setForeground(Color.WHITE);  // Set text color to white
+        return passwordField;
+    }
+
+    private JButton createButton(String text) {
+        JButton button = new JButton(text);
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        button.setFont(new Font("Dialog", Font.PLAIN, 18));
+        button.setBackground(new Color(100, 100, 100));  // Set a dark background color
+        button.setForeground(Color.WHITE);  // Set text color to white
+        return button;
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new JimsGUI().setVisible(true);
+        });
+    }
 }
-
-
-
-
