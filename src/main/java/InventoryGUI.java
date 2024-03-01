@@ -42,7 +42,7 @@ public class InventoryGUI extends JFrame {
 
         table.setAutoCreateRowSorter(true);
         setTitle("Inventory Overview");
-        setVisible(false);
+        setVisible(true);
     }
 
     private void addTableSelectionListener() {
@@ -239,6 +239,7 @@ public class InventoryGUI extends JFrame {
                 DefaultTableModel model = (DefaultTableModel) table.getModel();
                 model.removeRow(selectedRow);
 
+
                 Jims.deleteItemFromMongoDB(selectedRow);
 
                 System.out.println("Row deleted successfully!");
@@ -246,6 +247,7 @@ public class InventoryGUI extends JFrame {
                 JOptionPane.showMessageDialog(null, "Please select a row to delete.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
+
     }
 
     private void addSortingButtons() {
