@@ -14,8 +14,6 @@ public class AppLauncher {
             public void run() {
                 // Display program for debugging purposes
                 new JimsGUI().setVisible(true);
-                new OverviewGUI().setVisible(false);
-                new InventoryGUI().setVisible(false);
                 // TODO - needs optimizing
                 new PreLoader(Jims.getTable());
                 PreLoader.worker.execute();
