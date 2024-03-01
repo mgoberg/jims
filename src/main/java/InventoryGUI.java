@@ -2,49 +2,59 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
-import java.awt.event.ActionListener;
+
 import java.util.Comparator;
 import java.util.Vector;
 
+
+
 public class InventoryGUI extends JFrame {
-    private JTextField nameTextField;
-    private JTextField priceTextField;
-    private JTextField descTextField;
-    private JTextField qtyTextField;
-    private static JTable inventoryTable;
+    private JTextField nameText;
+    private JTextField priceText;
+    private JTextField descText;
+    private JTextField qtyText;
+    private static JTable table;
 
     public InventoryGUI() {
-        // Set up the JFrame
-        initializeFrame();
+        // Naming the Window
+        super("Overview");
 
-        // Add components to the JFrame
+        // Exit on close
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        // Window Size
+        setSize(1200, 800);
+
+        // Start Position
+        setLocationRelativeTo(null);
+
+        setLayout(null);
+
+        // Stop Resizing
+        setResizable(false);
+
+        // Add components
+        addSortingButtons();
+        addDeleteButton();
         displayTable();
         addButtons();
-        addTextFields();
+        textField();
         addHeader();
         addOverviewPanel();
         addTableSelectionListener();
 
-        // Enable table row sorting
-        inventoryTable.setAutoCreateRowSorter(true);
-    }
+        table.setAutoCreateRowSorter(true);
+        // Jims.scheduleTableUpdate(); LIVE UPDATES FOR DEBUGGING!!! Remove // For testing
 
-    private void initializeFrame() {
-        setTitle("Overview");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(1200, 800);
-        setLocationRelativeTo(null);
-        setLayout(null);
-        setResizable(false);
     }
 
     private void addTableSelectionListener() {
         // Add selection listener to the table
-        inventoryTable.getSelectionModel().addListSelectionListener(e -> {
-            int selectedRow = inventoryTable.getSelectedRow();
+        table.getSelectionModel().addListSelectionListener(e -> {
+            int selectedRow = table.getSelectedRow();
 
             if (selectedRow != -1) {
-                DefaultTableModel model = (DefaultTableModel) inventoryTable.getModel();
+                DefaultTableModel model = (DefaultTableModel) table.getModel();
 
                 // Retrieve data from the selected row
                 String itemName = model.getValueAt(selectedRow, 0).toString();
@@ -53,135 +63,166 @@ public class InventoryGUI extends JFrame {
                 String qty = model.getValueAt(selectedRow, 3).toString();
 
                 // Set the text fields with the retrieved data
-                nameTextField.setText(itemName);
-                priceTextField.setText(price);
-                descTextField.setText(desc);
-                qtyTextField.setText(qty);
+                nameText.setText(itemName);
+                priceText.setText(price);
+                descText.setText(desc);
+                qtyText.setText(qty);
             }
         });
     }
 
-    private void displayTable() {
-        inventoryTable = Jims.getTable();
-        JScrollPane scrollPane = new JScrollPane(inventoryTable);
+    public void displayTable() {
+        table = Jims.getTable();  // Update the reference to the JTable
+        // Wrap the table in a JScrollPane
+        JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBounds(50, 75, 1090, 300);
+        // table.setBackground(Color.BLACK);
         add(scrollPane);
 
-        customizeTableHeader();
-    }
-
-    private void customizeTableHeader() {
-        JTableHeader tableHeader = inventoryTable.getTableHeader();
+        JTableHeader tableHeader = table.getTableHeader();
         tableHeader.setBackground(Color.GRAY);
         tableHeader.setForeground(Color.WHITE);
         tableHeader.setReorderingAllowed(false);
         tableHeader.setBounds(600, 75, 570, 20);
         add(tableHeader);
-
-        inventoryTable.setGridColor(Color.LIGHT_GRAY);
+        table.setGridColor(Color.LIGHT_GRAY);
     }
 
     private void addHeader() {
+        // Return BTN
         JButton returnButton = new JButton("Back");
-        configureHeaderButton(returnButton, 10, 15, 100, 45);
+        returnButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        returnButton.setBounds(10, 15, 100, 45);
+        returnButton.setBackground(Color.WHITE);
+        add(returnButton);
         returnButton.addActionListener(e -> {
             dispose();
             new OverviewGUI().setVisible(true);
         });
 
-        addHeaderLabel("Inventory", 500, 20, 40);
-        addHeaderLabel("Control Panel", 470, 385, 40);
-
-        addHeaderPanel(0, 0, 1200, 75, new Color(124, 199, 194));
-        addHeaderPanel(0, 375, 1200, 75, new Color(50, 125, 198));
-        addHeaderPanel(0, 400, 350, 500, new Color(99, 125, 200));
-        addHeaderPanel(250, 400, 350, 500, new Color(99, 99, 99));
-    }
-
-    private void configureHeaderButton(JButton button, int x, int y, int width, int height) {
-        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        button.setBounds(x, y, width, height);
-        button.setBackground(Color.WHITE);
-        add(button);
-    }
-
-    private void addHeaderLabel(String text, int x, int y, int fontSize) {
-        JLabel headerText = new JLabel(text);
-        headerText.setBounds(x, y, 500, 45);
-        headerText.setFont(new Font("Dialog", Font.BOLD, fontSize));
+        // Add Header text
+        JLabel headerText = new JLabel("Inventory");
+        headerText.setBounds(500, 20, 500, 45);
+        headerText.setFont(new Font("Dialog", Font.BOLD, 40));
         add(headerText);
+
+        // Add second Header text
+        JLabel SecondHeaderText = new JLabel("Control Panel");
+        SecondHeaderText.setBounds(470, 385, 500, 45);
+        SecondHeaderText.setFont(new Font("Dialog", Font.BOLD, 40));
+        add(SecondHeaderText);
+
+        // Add header panel
+        JPanel header = new JPanel();
+        Color fargeHeader = new Color(124, 199, 194);
+        header.setBackground(fargeHeader);
+        header.setBounds(0, 0, 1200, 75);
+        add(header);
+
+        // Add second header panel
+        JPanel secondHeader = new JPanel();
+        Color secondHeaderFarge = new Color(50, 125, 198);
+        secondHeader.setBackground(secondHeaderFarge);
+        secondHeader.setBounds(0, 375, 1200, 75);
+        add(secondHeader);
+
+        // Add item header
+        JPanel addItemHeader = new JPanel();
+        Color addItemHeaderColor = new Color(99, 125, 200);
+        addItemHeader.setBackground(addItemHeaderColor);
+        addItemHeader.setBounds(0, 400, 350, 500);
+        add(addItemHeader);
+
+        JPanel addItemHeader2 = new JPanel();
+        Color addItemHeaderColor2 = new Color(99, 99, 99);
+        addItemHeader2.setBackground(addItemHeaderColor2);
+        addItemHeader2.setBounds(250, 400, 350, 500);
+        add(addItemHeader2);
+
     }
 
-    private void addHeaderPanel(int x, int y, int width, int height, Color color) {
-        JPanel headerPanel = new JPanel();
-        headerPanel.setBackground(color);
-        headerPanel.setBounds(x, y, width, height);
-        add(headerPanel);
+    public void textField() {
+        //Text fields
+        nameText = new JTextField();
+        nameText.setBounds(100, 470, 150, 35);
+        add(nameText);
+        JLabel nameLabel = new JLabel("Name:");
+        nameLabel.setBounds(50, 470, 150, 35);
+        add(nameLabel);
+
+        priceText = new JTextField();
+        priceText.setBounds(100, 520, 150, 35);
+        add(priceText);
+        JLabel priceLabel = new JLabel("Price:");
+        priceLabel.setBounds(50, 520, 150, 35);
+        add(priceLabel);
+
+        descText = new JTextField();
+        descText.setBounds(100, 570, 150, 35);
+        add(descText);
+        JLabel descLabel = new JLabel("Description:");
+        descLabel.setBounds(20, 570, 150, 35);
+        add(descLabel);
+
+        qtyText = new JTextField();
+        qtyText.setBounds(100, 620, 150, 35);
+        add(qtyText);
+        JLabel qtyLabel = new JLabel("Qty:");
+        qtyLabel.setBounds(50, 620, 150, 35);
+        add(qtyLabel);
+        table.setFont(new Font("Dialog", Font.PLAIN, 15));
     }
 
-    private void addOverviewPanel() {
-        JPanel overView = new JPanel();
-        overView.setBackground(new Color(213, 255, 255));
-        overView.setBounds(0, 0, getWidth(), getHeight());
-        add(overView);
-    }
-
-    private void addTextFields() {
-        nameTextField = createAndConfigureTextField(100, 470, 150, 35);
-        add(createLabel("Name:", 50, 470));
-
-        priceTextField = createAndConfigureTextField(100, 520, 150, 35);
-        add(createLabel("Price:", 50, 520));
-
-        descTextField = createAndConfigureTextField(100, 570, 150, 35);
-        add(createLabel("Description:", 20, 570));
-
-        qtyTextField = createAndConfigureTextField(100, 620, 150, 35);
-        add(createLabel("Qty:", 50, 620));
-
-        inventoryTable.setFont(new Font("Dialog", Font.PLAIN, 15));
-    }
-
-    private JTextField createAndConfigureTextField(int x, int y, int width, int height) {
-        JTextField textField = new JTextField();
-        textField.setBounds(x, y, width, height);
-        add(textField);
-        return textField;
-    }
-
-    private JLabel createLabel(String text, int x, int y) {
-        JLabel label = new JLabel(text);
-        label.setBounds(x, y, 150, 35);
-        add(label);
-        return label;
-    }
-
-    private void addButtons() {
-        addButton("Add Item", 100, 670, 150, 45, e -> {
-            String itemName = nameTextField.getText();
-            double price = Double.parseDouble(priceTextField.getText());
-            String desc = descTextField.getText();
-            int qty = Integer.parseInt(qtyTextField.getText());
+    public void addButtons() {
+        // Add item Button
+        JButton addItemBtn = new JButton("Add Item");
+        // TODO Placeholder spot
+        addItemBtn.setBounds(100, 670, 150, 45);
+        addItemBtn.setBackground(new Color(240, 240, 241));
+        addItemBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        add(addItemBtn);
+        addItemBtn.addActionListener(e -> {
+            String itemName = nameText.getText();
+            double price = Double.parseDouble(priceText.getText());
+            String desc = descText.getText();
+            int qty = Integer.parseInt(qtyText.getText());
 
             Jims.insertItemIntoMongoDB(itemName, price, desc, qty);
 
+            // Use the existing table variable
             DefaultTableModel updatedModel = Jims.getTableModel();
-            inventoryTable.setModel(updatedModel);
-            inventoryTable.repaint();
+            table.setModel(updatedModel);
+            table.repaint();
+
         });
 
-        addButton("Refresh", 400, 470, 150, 45, e -> {
+        // Add Refresh button
+        JButton refreshBtn = new JButton("Refresh");
+        // TODO Placeholder spot
+        refreshBtn.setBounds(400, 470, 150, 45);
+        refreshBtn.setBackground(new Color(240, 240, 241));
+        refreshBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        add(refreshBtn);
+        refreshBtn.addActionListener(e -> {
             DefaultTableModel updatedModel = Jims.getTableModel();
-            inventoryTable.setModel(updatedModel);
-            inventoryTable.repaint();
-            System.out.println("Number of rows in the model: " + inventoryTable.getModel().getRowCount());
+            table.setModel(updatedModel);
+            table.repaint();
+            System.out.println("Number of rows in the model: " + Jims.getTable().getModel().getRowCount());
         });
+    }
 
-        addButton("Delete selected item", 400, 520, 150, 45, e -> {
-            int selectedRow = inventoryTable.getSelectedRow();
+    private void addDeleteButton() {
+        // Add Delete button
+        JButton deleteItemBtn = new JButton("Delete selected item");
+        deleteItemBtn.setBounds(400, 520, 150, 45);
+        deleteItemBtn.setBackground(new Color(240, 240, 241));
+        deleteItemBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        add(deleteItemBtn);
+        deleteItemBtn.addActionListener(e -> {
+            int selectedRow = table.getSelectedRow();
 
             if (selectedRow != -1) {
-                DefaultTableModel model = (DefaultTableModel) inventoryTable.getModel();
+                DefaultTableModel model = (DefaultTableModel) table.getModel();
                 model.removeRow(selectedRow);
 
                 Jims.deleteItemFromMongoDB(selectedRow);
@@ -191,30 +232,57 @@ public class InventoryGUI extends JFrame {
                 JOptionPane.showMessageDialog(null, "Please select a row to delete.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
-
-        addButton("Sort by Price", 400, 570, 150, 45, e -> sortTableByColumn("Price"));
-        addButton("Sort A-Z", 400, 620, 150, 45, e -> sortTableByColumn("Name"));
-        addButton("Sort by Quantity", 400, 670, 150, 45, e -> sortTableByColumn("Quantity"));
     }
 
-    private void addButton(String text, int x, int y, int width, int height, ActionListener actionListener) {
-        JButton button = new JButton(text);
-        button.setBounds(x, y, width, height);
-        button.setBackground(new Color(240, 240, 241));
-        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        button.addActionListener(actionListener);
-        add(button);
+    private void addSortingButtons() {
+        // Add Sort by Price button
+        JButton sortByPriceBtn = new JButton("Sort by Price");
+        sortByPriceBtn.setBounds(400, 570, 150, 45);
+        sortByPriceBtn.setBackground(new Color(240, 240, 241));
+        sortByPriceBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        add(sortByPriceBtn);
+        sortByPriceBtn.addActionListener(e -> sortTableByColumn("Price"));
+
+        // Add Sort A-Z button
+        JButton sortAZBtn = new JButton("Sort A-Z");
+        sortAZBtn.setBounds(400, 620, 150, 45);
+        sortAZBtn.setBackground(new Color(240, 240, 241));
+        sortAZBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        add(sortAZBtn);
+        sortAZBtn.addActionListener(e -> sortTableByColumn("Name"));
+
+        // Add Sort by Quantity button
+        JButton sortByQtyBtn = new JButton("Sort by Quantity");
+        sortByQtyBtn.setBounds(400, 670, 150, 45);
+        sortByQtyBtn.setBackground(new Color(240, 240, 241));
+        sortByQtyBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        add(sortByQtyBtn);
+        sortByQtyBtn.addActionListener(e -> sortTableByColumn("Quantity"));
     }
 
     private void sortTableByColumn(String columnName) {
-        DefaultTableModel model = (DefaultTableModel) inventoryTable.getModel();
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
         int columnIndex = model.findColumn(columnName);
 
         Vector<Vector> data = model.getDataVector();
 
-        data.sort(Comparator.comparing(row -> row.get(columnIndex).toString()));
+        data.sort((Comparator<? super Vector>) (row1, row2) -> {
+            String value1 = row1.get(columnIndex).toString();
+            String value2 = row2.get(columnIndex).toString();
+
+            // Compare the values
+            return value1.compareTo(value2);
+        });
 
         model.fireTableDataChanged();
     }
-    
+
+    private void addOverviewPanel() {
+        // Add background panel
+        JPanel overView = new JPanel();
+        Color fargeOverview = new Color(213, 255, 255);
+        overView.setBackground(fargeOverview);
+        overView.setBounds(0, 0, getWidth(), getHeight());
+        add(overView);
+    }
 }
