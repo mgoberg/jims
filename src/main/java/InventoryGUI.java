@@ -72,7 +72,7 @@ public class InventoryGUI extends JFrame {
         table = Jims.getTable();  // Update the reference to the JTable
         // Wrap the table in a JScrollPane
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(50, 75, 1090, 300);
+        scrollPane.setBounds(1, 75, 1188, 300);
         // table.setBackground(Color.BLACK);
         add(scrollPane);
 
@@ -90,7 +90,7 @@ public class InventoryGUI extends JFrame {
         JButton returnButton = new JButton("Back");
         returnButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         returnButton.setBounds(10, 15, 100, 45);
-        returnButton.setBackground(Color.WHITE);
+        returnButton.setBackground(new Color(50,50,50));
         add(returnButton);
         returnButton.addActionListener(e -> {
             dispose();
