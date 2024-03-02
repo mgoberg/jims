@@ -1,3 +1,4 @@
+
 <div align="center">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
@@ -36,6 +37,9 @@ JIMS, short for Java Inventory Management System, is a comprehensive inventory m
 - **📊 MongoDB Integration:**
   JIMS integrates MongoDB as the database system for storing inventory data. MongoDB's NoSQL nature allows for flexible and scalable data storage. It efficiently handles large volumes of inventory data, providing a reliable and high-performance solution for businesses.
 
+- **🎨 FlatLaf Integration:**
+  Enhance the visual appeal of the JIMS GUI by integrating [FlatLaf](https://www.formdev.com/flatlaf/), a modern and flat look-and-feel for Java Swing applications.
+
 ## Prerequisites
 
 Before using JIMS, ensure that the following prerequisites are met:
@@ -66,7 +70,7 @@ Before using JIMS, ensure that the following prerequisites are met:
    java -jar target/JIMS.jar
    ```
 
-2. Log in with mongoDB credentials - admin - root.
+2. Log in with MongoDB credentials - admin - root.
 3. Utilize the features provided in the application to manage your inventory efficiently.
 
 ## Contributing
@@ -80,12 +84,9 @@ Contributions to JIMS are welcome! Feel free to submit issues, suggest improveme
 5. Submit a pull request.
 
 ## Preview
-Login
+# Login
 ![528c0a17ac235b9e6cefbebca0a700e4](https://github.com/mgoberg/jims/assets/116804646/4b4ad764-00a7-4c9a-af84-86bcb205ffb2)
-Placeholder for functionality > good UI - Changes comming
+# Placeholder for functionality > good UI - Changes coming
 ![ff5fa20180a65a4c566aadd2c4d15d85](https://github.com/mgoberg/jims/assets/116804646/a7d97f8f-c381-4e59-9ea7-944b04160de6)
-
-
-
 
 [⬆️ Return to Top](#jims---java-inventory-management-system)
