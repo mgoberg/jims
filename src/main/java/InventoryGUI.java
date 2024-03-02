@@ -133,7 +133,7 @@ public class InventoryGUI extends JFrame {
         add(addItemHeader);
 
         JPanel addItemHeader2 = new JPanel();
-        Color addItemHeaderColor2 = new Color(30, 30, 30);
+        Color addItemHeaderColor2 = new Color(32, 32, 32);
         addItemHeader2.setBackground(addItemHeaderColor2);
         addItemHeader2.setBounds(250, 400, 350, 500);
         add(addItemHeader2);

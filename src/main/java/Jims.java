@@ -16,6 +16,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 public class Jims {
     private static MongoClient client;
     private static MongoCollection<Document> usersCollection;
@@ -41,15 +43,18 @@ public class Jims {
 
     // Establish Database connection
     private static void connDB() {
-        client = MongoClients.create("mongodb+srv://martingoberg:root@jims.byniw4p.mongodb.net/?retryWrites=true&w=majority");
+        Dotenv dotenv = Dotenv.configure().directory("src/main/java/.env").load();
+        String mongoDB = dotenv.get("CONN");
+        client = MongoClients.create(mongoDB);
+        MongoDatabase database = client.getDatabase("users");
+        usersCollection = database.getCollection("users");
     }
 
     // Load users table
     private static void loadUsers() {
         try {
             connDB();
-            MongoDatabase database = client.getDatabase("users");
-            usersCollection = database.getCollection("users");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
