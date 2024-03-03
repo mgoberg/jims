@@ -87,7 +87,6 @@ public class Jims {
             Object[] rowData = {document.get("name"), document.get("price"), document.get("desc"), document.get("qty")};
             model.addRow(rowData);
         }
-
         return model;
     }
 
