@@ -41,6 +41,7 @@ public class OverviewGUI extends JFrame {
                 inventoryGUI.setVisible(true);
             }
         });
+
         add(inventoryBtn);
 
         // Add placeholder button

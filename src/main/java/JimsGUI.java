@@ -14,7 +14,6 @@ public class JimsGUI extends JFrame {
             e.printStackTrace();
         }
 
-
         // Exit on close
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -29,9 +28,7 @@ public class JimsGUI extends JFrame {
         mainPanel.setBackground(new Color(50, 50, 50));  // Set a dark background color
 
         // Add components
-
         addLoginComponent(mainPanel);
-
         setContentPane(mainPanel);
     }
 

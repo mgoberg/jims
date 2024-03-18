@@ -20,7 +20,6 @@ public class InventoryGUI extends JFrame {
         } catch (UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
-
         initComponents();
     }
 
@@ -137,7 +136,6 @@ public class InventoryGUI extends JFrame {
         addItemHeader2.setBackground(addItemHeaderColor2);
         addItemHeader2.setBounds(250, 400, 350, 500);
         add(addItemHeader2);
-
     }
 
     public void textField() {
@@ -205,7 +203,6 @@ public class InventoryGUI extends JFrame {
             DefaultTableModel updatedModel = Jims.getTableModel();
             table.setModel(updatedModel);
             table.repaint();
-
         });
 
         // Add Refresh button
@@ -238,7 +235,6 @@ public class InventoryGUI extends JFrame {
             if (selectedRow != -1) {
                 DefaultTableModel model = (DefaultTableModel) table.getModel();
                 model.removeRow(selectedRow);
-
 
                 Jims.deleteItemFromMongoDB(selectedRow);
 
@@ -282,7 +278,7 @@ public class InventoryGUI extends JFrame {
     private void sortTableByColumn(String columnName) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         int columnIndex = model.findColumn(columnName);
-
+    //TODO FIKS DETTE
         Vector<Vector> data = model.getDataVector();
 
         data.sort((Comparator<? super Vector>) (row1, row2) -> {
