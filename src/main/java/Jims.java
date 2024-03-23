@@ -30,7 +30,6 @@ public class Jims {
         // Run the updateTable method every 10 seconds
         scheduler.scheduleAtFixedRate(Jims::updateTableTask, 0, 10, TimeUnit.SECONDS);
     }
-
     private static void updateTableTask() {
         SwingUtilities.invokeLater(() -> {
             JTable table = getTable();
@@ -48,16 +47,6 @@ public class Jims {
         client = MongoClients.create(mongoDB);
         MongoDatabase database = client.getDatabase("users");
         usersCollection = database.getCollection("users");
-    }
-
-    // Load users table
-    private static void loadUsers() {
-        try {
-            connDB();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     // Load items table
@@ -89,12 +78,22 @@ public class Jims {
         }
         return model;
     }
+    // Retrieves the table
+    public static JTable getTable() {
+        JTable table = new JTable(model);
+        DefaultTableModel updatedModel = getTableModel();
+        table.setModel(updatedModel);
+        table.repaint();
+        table.setLayout(new BorderLayout());
+        table.setBounds(600, 95, 570, 700);
+        return table;
+    }
 
     // Authenticate user
     public static boolean authenticateUser(String username, String password) {
         try {
             // Establish MongoDB connection
-            loadUsers();
+            connDB();
 
             // Handle
             if (usersCollection == null) {
@@ -135,17 +134,6 @@ public class Jims {
         collection.insertOne(document);
 
         System.out.println("Item inserted successfully!");
-    }
-
-    // Retrieves the table
-    public static JTable getTable() {
-        JTable table = new JTable(model);
-        DefaultTableModel updatedModel = getTableModel();
-        table.setModel(updatedModel);
-        table.repaint();
-        table.setLayout(new BorderLayout());
-        table.setBounds(600, 95, 570, 700);
-        return table;
     }
 
     // Delete item from table / database
