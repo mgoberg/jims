@@ -114,7 +114,7 @@ public class Jims {
 
             return userCount > 0;
         } catch (Exception ex) {
-            ex.printStackTrace();
+            ex.getMessage();
             return false;
         }
     }
