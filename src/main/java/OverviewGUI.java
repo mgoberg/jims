@@ -28,6 +28,15 @@ public class OverviewGUI extends JFrame {
         // Add inventory button
         JButton settingsButton = createStyledButton("Settings");
         settingsButton.setBounds(300, 300, 150, 140);
+        settingsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                SettingsGUI settingsGUI = new SettingsGUI();
+                settingsGUI.setVisible(true);
+
+            }
+        });
         add(settingsButton);
 
         // Add inventory button
@@ -45,9 +54,17 @@ public class OverviewGUI extends JFrame {
         add(inventoryBtn);
 
         // Add placeholder button
-        JButton placeholder = createStyledButton("Placeholder");
-        placeholder.setBounds(750, 300, 150, 140);
-        add(placeholder);
+        JButton statistics = createStyledButton("Statistics");
+        statistics.setBounds(750, 300, 150, 140);
+        statistics.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                StatsGUI statsGUI = new StatsGUI();
+                statsGUI.setVisible(true);
+            }
+        });
+        add(statistics);
 
         // Add header text
         JLabel headerText = new JLabel("Inventory Management");
